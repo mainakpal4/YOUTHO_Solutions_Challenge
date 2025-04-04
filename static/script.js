@@ -26,11 +26,10 @@ document.getElementById('signup-form').addEventListener('submit', async function
         alert("✅ Registration successful! Redirecting to login...");
         window.location.href = "/static/login.html";
       } else {
-        errorMessage.innerText = `❌ ${result.message}`;
+        errorMessage.innerText = ❌ ${result.message};
       }
     } catch (error) {
       console.error("❌ Error during registration:", error);
       errorMessage.innerText = "❌ Could not connect to server.";
     }
   });
-  
