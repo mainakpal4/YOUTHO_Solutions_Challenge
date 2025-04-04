@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - YOUTHO</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="navbar">
+        <a href="index.html">HOME</a>
+        <a href="dashboard.html">DASHBOARD</a>
+    </div>
+    
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <h2>Dashboard</h2>
+            <a href="#">Overview</a>
+            <a href="#">Reports</a>
+            <a href="#">Analytics</a>
+            <a href="#">Resources</a>
+            <a href="#">Study Planner</a>
+            <a href="#">Job Opportunities</a>
+            <a href="#">Settings</a>
+        </div>
+
+        <div class="main-content">
+            <h2>Student Learning Dashboard</h2>
+            
+            <div class="cards">
+                <div class="card">Total Users: 5,430</div>
+                <div class="card">Courses Completed: 1,230</div>
+                <div class="card">Progress: 76%</div>
+                <div class="card">Daily Study Hours: 3.5 hrs</div>
+            </div>
+            
+            <h3>Learning Progress Chart</h3>
+            <canvas id="chart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('chart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [{
+                    label: 'Learning Progress',
+                    data: [20, 40, 60, 80, 100],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            }
+        });
+    </script>
+</body>
+</html>

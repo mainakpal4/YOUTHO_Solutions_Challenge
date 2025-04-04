@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | YOUTHO</title>
+    <link rel="stylesheet" href="/static/login_styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Sign Up for YOUTHO</h2>
+        <form id="signup-form">
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            <input type="password" id="password" name="password" placeholder="Create a password" required>
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+            <button type="submit">Sign Up</button>
+        </form>
+        <p>Already have an account? <a href="/static/login.html">Login</a></p>
+        <p id="error-message" style="color: red;"></p>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>

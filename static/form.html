@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Certificates</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <!-- Firebase App (the core Firebase SDK) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<!-- Firebase Storage -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+<!-- Firebase Firestore -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+<script>
+    const firebaseConfig = {
+    apiKey: "AIzaSyCy83hZvTLAmtVERjAwiszWHqBYABhICQk",
+    authDomain: "youtho-d1009.firebaseapp.com",
+    projectId: "youtho-d1009",
+    storageBucket: "youtho-d1009.firebasestorage.app",
+    messagingSenderId: "845018463362",
+    appId: "1:845018463362:web:4b59dfcaedcd6ce643489b",
+    //measurementId: "G-YSPSWGZVYF"
+  };
+
+  
+    firebase.initializeApp(firebaseConfig);
+    const storage = firebase.storage();
+    const db = firebase.firestore();
+</script>
+  
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        .form-container {
+            background: white;
+            color: black;
+            padding: 30px;
+            border-radius: 50%;
+            width: 320px;
+            height: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+            position: relative;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        input[type="file"] {
+            margin: 10px 0;
+            display: block;
+        }
+        .upload-btn {
+            padding: 10px 20px;
+            border: none;
+            background-color: #38a169;
+            color: black;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .upload-btn:hover {
+            background-color: #38a169;
+        }
+        .message {
+            font-size: 14px;
+            margin-top: 10px;
+            color: #28a745;
+            display: none;
+        }
+        .emoji {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="emoji">📜</div>
+        <h2 style="font-size: 18px;">Upload Certificates</h2>
+        <p style="font-size: 12px;">Boost your success score!</p>
+        <form id="upload-form">
+            <input type="file" id="certificate" accept=".pdf, .jpg">
+            <br>
+            <button type="submit" class="upload-btn">Upload</button>
+            <p class="message" id="success-message">✅ Uploaded Successfully!</p>
+        </form>
+    </div>
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('certificate');
+            const file = fileInput.files[0];
+            const userId = "user123"; // Replace with dynamic ID if available
+            const successMessage = document.getElementById("success-message");
+    
+            if (!file) {
+                alert("Please select a file.");
+                return;
+            }
+    
+            try {
+                // Upload file to Firebase Storage
+                const storageRef = firebase.storage().ref();
+                const fileRef = storageRef.child(`certificates/${userId}/${file.name}`);
+                await fileRef.put(file);
+    
+                // Optional: Store metadata if needed
+                await db.collection("certificates").add({
+                    userId: userId,
+                    fileName: file.name,
+                    uploadedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+    
+                // Update user score in Firestore
+                const userDocRef = db.collection("users").doc(userId);
+                const doc = await userDocRef.get();
+    
+                let newScore = 10;
+                if (doc.exists) {
+                    const data = doc.data();
+                    newScore = (data.score || 0) + 10;
+                }
+    
+                await userDocRef.set({ score: newScore }, { merge: true });
+    
+                // Optional: Update localStorage if used in index.html
+                localStorage.setItem("userScore", newScore);
+    
+                // Show success message
+                successMessage.style.display = "block";
+    
+            } catch (error) {
+                alert("Error uploading file or updating score: " + error.message);
+                console.error(error);
+            }
+        });
+    </script>
+          
+</body>
+</html>
